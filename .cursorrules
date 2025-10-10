@@ -1,0 +1,358 @@
+# Modible Project - Cursor AI Rules
+
+## Project Overview
+
+Modible is a retro-futuristic personal brand website built with SvelteKit, TypeScript, Tailwind CSS, and MDsveX. It features interactive demos, essays, and art with a 90s computing aesthetic.
+
+**Live Site**: https://modible-site.netlify.app
+**Stack**: SvelteKit + TypeScript + Tailwind + MDsveX + Static Adapter
+
+## Code Style & Conventions
+
+### TypeScript
+- Use TypeScript for all code
+- Prefer interfaces over types
+- Use proper type annotations
+- No `any` types unless absolutely necessary
+
+### Svelte Components
+- Use `<script lang="ts">` for all components
+- Prefer composition over inheritance
+- Keep components focused and single-purpose
+- Use Svelte stores for global state
+- Follow naming: PascalCase for components, camelCase for functions
+
+### Styling
+- Use Tailwind CSS utilities first
+- Custom CSS in component `<style>` blocks for complex styles
+- Use CSS custom properties from `src/lib/styles/tokens.css`
+- Mobile-first responsive design (min-width breakpoints)
+
+### File Organization
+- Components in `src/lib/components/{category}/`
+- Utilities in `src/lib/utils/`
+- Types in `src/lib/types/`
+- Routes in `src/routes/`
+- Content in `src/content/{type}/`
+
+## Content Management
+
+### Adding Content
+
+**Use CLI tool:**
+```bash
+node scripts/new-content.js [type] "Title" slug
+```
+
+Types: `demo`, `essay`, `art`
+
+### Content Structure
+
+**Location**: `src/content/{demos|essays|art}/slug.md`
+
+**Frontmatter** (YAML):
+```yaml
+---
+type: demo|essay|art
+title: "Title"
+slug: slug-name
+description: "SEO description"
+date: "YYYY-MM-DD"
+featured: boolean
+draft: boolean
+tags: ["tag1", "tag2"]
+og_image: "/images/{type}/slug-og.png"
+---
+```
+
+### Images
+
+- Content images: `static/images/{type}/`
+- OG images: 1200x630px, `static/images/{type}/slug-og.png`
+- Reference in markdown: `![Alt](/images/{type}/image.png)`
+
+### Music
+
+- Files: `static/music/*.mp3`
+- Playlist: `static/music/playlist.json`
+- Embedded player: Import `EmbeddedMusicPlayer` component in markdown
+
+## Component Architecture
+
+### Key Components
+
+**Layout:**
+- `Container.svelte` - Responsive content width
+- `Header.svelte` - Global navigation
+- `Footer.svelte` - Site footer
+
+**Content:**
+- `ArcadeCard.svelte` - Project preview cards
+- `ContentGrid.svelte` - Responsive grid with animations
+- `RetroPanel.svelte` - Windows 95-style containers
+- `MarkdownLayout.svelte` - Markdown rendering wrapper
+
+**UI:**
+- `Button.svelte` - Retro-styled buttons
+- `Tag.svelte` - Content tags
+- `CassetteLoader.svelte` - Route transition loader
+- `MusicPlayer.svelte` - Global music player
+
+**Effects:**
+- `Scanlines.svelte` - CRT scanline overlay
+
+**SEO:**
+- `SEOHead.svelte` - Meta tags, OG, canonical
+
+### Creating New Components
+
+1. Choose appropriate category directory
+2. Create `ComponentName.svelte`
+3. Use TypeScript: `<script lang="ts">`
+4. Export props with proper types
+5. Add accessibility attributes (ARIA, roles)
+6. Support reduced-motion when applicable
+7. Make mobile-first responsive
+
+**Template:**
+```svelte
+<script lang="ts">
+  export let propName: string;
+  export let optional: boolean = false;
+  
+  // Component logic
+</script>
+
+<div class="component-name" role="region" aria-label="Description">
+  <slot />
+</div>
+
+<style>
+  .component-name {
+    /* Styles */
+  }
+  
+  @media (max-width: 768px) {
+    /* Mobile styles */
+  }
+</style>
+```
+
+## Routes & Pages
+
+### Adding New Routes
+
+1. Create directory: `src/routes/path/`
+2. Add `+page.svelte` for the page component
+3. Add `+page.ts` for data loading (if needed)
+4. Add `+layout.svelte` for nested layouts (if needed)
+
+### Data Loading
+
+Use `+page.ts` for static data:
+```typescript
+import type { PageLoad } from './$types';
+import { loadContent } from '$lib/utils/content';
+
+export const load: PageLoad = async () => {
+  const items = await loadContent('demo');
+  return { items };
+};
+```
+
+### Dynamic Routes
+
+Use `[slug]` for dynamic segments:
+```
+src/routes/demos/[slug]/+page.ts
+src/routes/demos/[slug]/+page.svelte
+```
+
+## Accessibility Requirements
+
+- WCAG 2.1 AA compliance
+- Keyboard navigation for all interactive elements
+- Visible focus indicators
+- ARIA labels and roles
+- Alt text for all images
+- Semantic HTML
+- 44px minimum tap targets on mobile
+- Reduced-motion support for animations
+- Skip to content link
+
+## Performance Guidelines
+
+- Keep bundle size under 100KB JS, 20KB CSS (gzipped)
+- Lazy load images below fold
+- Use `loading="lazy"` on images
+- Preload critical fonts
+- Minimize layout shifts (CLS < 0.1)
+- Target LCP < 2.5s
+- Use static generation (no SSR)
+
+## Testing
+
+Before committing:
+```bash
+npm run check    # Type check
+npm run build    # Test build
+npm run preview  # Preview build
+```
+
+## Common Tasks
+
+### Add a new demo
+```bash
+node scripts/new-content.js demo "Demo Title" demo-slug
+# Edit src/content/demos/demo-slug.md
+# Add images to static/images/demos/
+# Create OG image (1200x630px)
+git add . && git commit -m "Add demo: Demo Title"
+git push
+```
+
+### Update site config
+Edit `src/lib/config.ts`
+
+### Add new component
+1. Create in appropriate `src/lib/components/{category}/`
+2. Export props with TypeScript types
+3. Add accessibility attributes
+4. Test on mobile and desktop
+5. Support reduced-motion
+
+### Update styles
+- Global: `src/lib/styles/global.css`
+- Tokens: `src/lib/styles/tokens.css`
+- Component: `<style>` block in component
+
+## Deployment
+
+- **Platform**: Netlify
+- **Trigger**: Push to `main` branch
+- **Build**: Automatic (2-3 minutes)
+- **URL**: https://modible-site.netlify.app
+
+## Environment Variables
+
+Set in Netlify Dashboard:
+- `PUBLIC_SITE_URL` - Site URL
+- `PUBLIC_GA_ID` - Google Analytics ID (optional)
+
+## Design Tokens
+
+Use CSS custom properties from `tokens.css`:
+
+**Colors:**
+- `--neon-purple-{900|700|500|400|200}`
+- `--terminal-green{|-glow|-dim}`
+- `--crt-{black|gray-900|gray-800|gray-700|gray-500|gray-300|white}`
+
+**Spacing:**
+- `--space-{xs|sm|md|lg|xl|xxl}` (4px to 48px)
+
+**Typography:**
+- `--font-{display|interface|code|label}`
+
+**Animation:**
+- `--duration-{instant|fast|normal|slow}` (50ms to 400ms)
+- `--ease-{default|snappy|smooth}`
+
+**Effects:**
+- `--focus-ring`
+- `--radius-{sm|md}`
+
+## Reduced Motion
+
+Always check for reduced-motion preference:
+
+```svelte
+<script>
+  import { onMount } from 'svelte';
+  
+  let reducedMotion = false;
+  
+  onMount(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    reducedMotion = mediaQuery.matches;
+  });
+</script>
+
+<div class:animate={!reducedMotion}>
+  <!-- Content -->
+</div>
+
+<style>
+  @media (prefers-reduced-motion: reduce) {
+    .animate {
+      animation: none;
+      transition: none;
+    }
+  }
+</style>
+```
+
+## Mobile-First Design
+
+Always design for mobile first, then enhance for desktop:
+
+```css
+/* Mobile (default) */
+.component {
+  font-size: 1rem;
+  padding: var(--space-md);
+}
+
+/* Tablet and up */
+@media (min-width: 768px) {
+  .component {
+    font-size: 1.125rem;
+    padding: var(--space-lg);
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .component {
+    font-size: 1.25rem;
+    padding: var(--space-xl);
+  }
+}
+```
+
+## Documentation
+
+- **Project Guide**: `docs/PROJECT_GUIDE.md`
+- **Content Guide**: `docs/CONTENT_GUIDE.md`
+- **Deployment**: `docs/DEPLOYMENT.md`
+- **This File**: `.cursorrules`
+
+## Git Workflow
+
+```bash
+# Feature branch
+git checkout -b feature/name
+# Make changes
+git add .
+git commit -m "Description"
+git push origin feature/name
+# Create PR on GitHub
+
+# Quick fixes to main
+git add .
+git commit -m "Fix: description"
+git push origin main
+```
+
+## Support
+
+For questions or issues:
+1. Check documentation in `docs/`
+2. Review existing components for patterns
+3. Check GitHub issues
+4. Refer to SvelteKit docs: https://kit.svelte.dev
+
+---
+
+**Remember**: Mobile-first, accessible, performant, and retro-aesthetic!
+

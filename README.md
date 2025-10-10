@@ -1,131 +1,135 @@
 # Modible
 
-Interactive museum of modern technology wrapped in nostalgic 90s aesthetics.
+> Making modern technology accessible through nostalgic aesthetics
 
-## Tech Stack
+A retro-futuristic personal brand website featuring interactive demos, essays, and art. Built with SvelteKit, combining 90s computing aesthetics with modern web performance.
 
-- **Framework**: SvelteKit
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS + Custom CSS
-- **Content**: MDsveX (Markdown)
-- **Deployment**: Netlify (Static)
+**Live Site**: [modible-site.netlify.app](https://modible-site.netlify.app)
 
-## Getting Started
+## Features
 
-### Prerequisites
+- 🎮 **Arcade Cards Grid** - Retro-styled project showcase
+- 📼 **Cassette Loader** - Animated route transitions
+- 🎵 **Music Player** - Global cassette-themed player with smart pause/resume
+- 📱 **Mobile-First** - Responsive design optimized for all devices
+- ♿ **Accessible** - WCAG 2.1 AA compliant
+- ⚡ **Fast** - Static site generation, <100KB bundle
+- 🎨 **Retro Effects** - CRT scanlines, neon glows, defrag animations
 
-- Node.js 20+
-- npm or pnpm
-
-### Installation
+## Quick Start
 
 ```bash
+# Install dependencies
 npm install
-```
 
-### Development
-
-```bash
+# Start dev server
 npm run dev
-```
 
-Open [http://localhost:5173](http://localhost:5173) in your browser.
-
-### Building
-
-```bash
+# Build for production
 npm run build
-```
 
-### Preview Production Build
-
-```bash
+# Preview production build
 npm run preview
 ```
 
-## Creating Content
+## Tech Stack
 
-### New Demo
+- **Framework**: [SvelteKit](https://kit.svelte.dev) with TypeScript
+- **Styling**: [Tailwind CSS](https://tailwindcss.com) + Custom CSS
+- **Content**: [MDsveX](https://mdsvex.pngwn.io) (Markdown)
+- **Deployment**: [Netlify](https://netlify.com)
+- **Analytics**: Google Analytics 4 (privacy-friendly)
+
+## Documentation
+
+- **[Project Guide](docs/PROJECT_GUIDE.md)** - Architecture, configuration, troubleshooting
+- **[Content Guide](docs/CONTENT_GUIDE.md)** - Adding demos, essays, art, and music
+- **[Deployment Guide](docs/DEPLOYMENT.md)** - Netlify deployment and monitoring
+- **[Cursor Rules](.cursorrules)** - AI assistant guidelines
+
+## Adding Content
+
+Use the CLI scaffolding tool:
 
 ```bash
-npm run new:demo "Demo Title" demo-slug
+# Create a new demo
+node scripts/new-content.js demo "Neural Network Visualizer" neural-network-visualizer
+
+# Create a new essay
+node scripts/new-content.js essay "The Future of Web Design" future-web-design
+
+# Create a new art piece
+node scripts/new-content.js art "Neon Dreams" neon-dreams
 ```
 
-### New Essay
-
-```bash
-npm run new:essay "Essay Title" essay-slug
-```
-
-### New Art
-
-```bash
-npm run new:art "Art Title" art-slug
-```
+See [Content Guide](docs/CONTENT_GUIDE.md) for detailed instructions.
 
 ## Project Structure
 
 ```
-modible/
+modible-site/
 ├── src/
+│   ├── content/           # Markdown content (demos, essays, art)
 │   ├── lib/
-│   │   ├── components/     # Reusable components
-│   │   ├── styles/         # Global styles and tokens
-│   │   ├── types/          # TypeScript types
-│   │   ├── utils/          # Utility functions
-│   │   └── stores/         # Svelte stores
-│   ├── routes/             # SvelteKit routes
-│   └── content/            # Markdown content
-│       ├── demos/
-│       ├── essays/
-│       ├── art/
-│       └── meta/
-├── static/                 # Static assets
-│   ├── fonts/
-│   ├── images/
-│   └── music/
-└── scripts/                # Build scripts
+│   │   ├── components/    # Svelte components
+│   │   ├── stores/        # Global state
+│   │   ├── styles/        # Global styles & tokens
+│   │   └── utils/         # Utilities
+│   └── routes/            # SvelteKit routes
+├── static/                # Static assets (images, music)
+├── docs/                  # Documentation
+└── scripts/               # Build scripts
 ```
 
-## Environment Variables
+## Development
 
-Create a `.env` file based on `.env.example`:
+```bash
+# Type check
+npm run check
 
-```env
-PUBLIC_SITE_URL=https://modible.netlify.app
-PUBLIC_GA4_ID=
-PUBLIC_ENABLE_ANALYTICS=false
+# Build
+npm run build
+
+# Preview build
+npm run preview
 ```
 
 ## Deployment
 
-The site is configured for Netlify deployment. Push to your repository and Netlify will automatically build and deploy.
+Automatic deployment on push to `main` branch via Netlify.
 
-### Manual Deployment
-
+Manual deploy:
 ```bash
-npm run build
-# Upload the `build/` directory to your hosting provider
+git add .
+git commit -m "Your changes"
+git push origin main
 ```
 
-## Design System
+See [Deployment Guide](docs/DEPLOYMENT.md) for details.
 
-- **Colors**: Purple phosphor (primary), Terminal green (accent), CRT grayscale (base)
-- **Typography**: Press Start 2P (display), Epilogue (interface), JetBrains Mono (code)
-- **Effects**: Scanlines, CRT glow, beveled borders
-- **Motion**: Reduced motion support, mobile-optimized animations
+## Performance
 
-## Features
+- **Bundle Size**: ~34KB JS, ~20KB CSS (gzipped)
+- **Lighthouse Score**: 90+ on all metrics
+- **Core Web Vitals**: LCP <2.5s, FID <100ms, CLS <0.1
 
-- ✅ Mobile-first responsive design
-- ✅ Arcade card grid with CRT effects
-- ✅ Retro panel components
-- ✅ SEO optimized with meta tags
-- ✅ Accessible (WCAG 2.1 AA)
-- ✅ Fast performance (<2.5s LCP)
-- ✅ Static site generation
+## Browser Support
+
+- Chrome/Edge (last 2 versions)
+- Firefox (last 2 versions)
+- Safari (last 2 versions)
+- iOS Safari (last 2 versions)
+- Android Chrome (last 2 versions)
 
 ## License
 
-© 2025 Modible. All rights reserved.
+Private project - All rights reserved
 
+## Contact
+
+- **GitHub**: [@wisdom1456](https://github.com/wisdom1456)
+- **Email**: Modible@gmail.com
+
+---
+
+Built with ❤️ and nostalgia for the golden age of computing
