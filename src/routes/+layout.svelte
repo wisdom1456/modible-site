@@ -10,6 +10,9 @@
 	import GoogleAnalytics from '$lib/components/analytics/GoogleAnalytics.svelte';
 	import { musicPlayer } from '$lib/stores/musicPlayer';
 	import type { Track } from '$lib/stores/musicPlayer';
+	import type { LayoutData } from './$types';
+	
+	export let data: LayoutData;
 	
 	let showLoader = false;
 	let loaderProgress = 0;

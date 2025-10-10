@@ -125,6 +125,7 @@
 		class="music-player"
 		class:collapsed={isCollapsed}
 		class:mobile={isMobile}
+		class:playing={$musicPlayer.isPlaying && !reducedMotion}
 		role="region"
 		aria-label="Music player"
 	>
@@ -149,10 +150,27 @@
 			<div class="reels">
 				<div class="reel left" class:spinning={$musicPlayer.isPlaying && !reducedMotion}>
 					<div class="reel-center"></div>
+					<div class="tape-spool" class:active={$musicPlayer.isPlaying && !reducedMotion}></div>
 				</div>
 				<div class="reel right" class:spinning={$musicPlayer.isPlaying && !reducedMotion}>
 					<div class="reel-center"></div>
+					<div class="tape-spool" class:active={$musicPlayer.isPlaying && !reducedMotion}></div>
 				</div>
+			</div>
+			
+			<!-- Tape Transport -->
+			<div class="tape-transport" class:active={$musicPlayer.isPlaying && !reducedMotion}>
+				<div class="tape-path"></div>
+				<div class="tape-path"></div>
+			</div>
+			
+			<!-- VU Meter -->
+			<div class="vu-meter" class:active={$musicPlayer.isPlaying && !reducedMotion}>
+				<div class="vu-bar"></div>
+				<div class="vu-bar"></div>
+				<div class="vu-bar"></div>
+				<div class="vu-bar"></div>
+				<div class="vu-bar"></div>
 			</div>
 			
 			<!-- Track info -->
@@ -246,7 +264,15 @@
 		border-radius: var(--radius-sm);
 		padding: var(--space-md);
 		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-		transition: transform var(--duration-normal) var(--ease-default);
+		transition: transform var(--duration-normal) var(--ease-default), box-shadow var(--duration-normal) var(--ease-default);
+	}
+	
+	.music-player.playing {
+		box-shadow: 
+			0 8px 32px rgba(0, 0, 0, 0.5),
+			0 0 20px rgba(139, 69, 19, 0.3),
+			inset 0 0 20px rgba(139, 69, 19, 0.1);
+		animation: cassetteGlow 3s ease-in-out infinite;
 	}
 	
 	.music-player:focus {
@@ -322,9 +348,160 @@
 		border: 1px solid var(--crt-gray-500);
 	}
 	
+	.tape-spool {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 30px;
+		height: 30px;
+		border-radius: 50%;
+		background: transparent;
+		border: 2px solid var(--crt-gray-600);
+		opacity: 0.7;
+		transition: opacity var(--duration-fast);
+	}
+	
+	.tape-spool.active {
+		animation: tapeSpool 3s linear infinite;
+		opacity: 1;
+	}
+	
+	.tape-transport {
+		position: relative;
+		height: 8px;
+		margin: var(--space-xs) var(--space-lg);
+		opacity: 0.3;
+		transition: opacity var(--duration-fast);
+	}
+	
+	.tape-transport.active {
+		opacity: 0.8;
+	}
+	
+	.tape-path {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 2px;
+		background: linear-gradient(90deg, 
+			transparent 0%, 
+			var(--terminal-green) 20%, 
+			var(--terminal-green-glow) 50%, 
+			var(--terminal-green) 80%, 
+			transparent 100%
+		);
+		background-size: 200% 100%;
+		animation: tapeFlow 2s linear infinite;
+	}
+	
+	.tape-path:nth-child(2) {
+		top: 6px;
+		animation-delay: 1s;
+		animation-direction: reverse;
+	}
+	
+	.vu-meter {
+		display: flex;
+		justify-content: center;
+		align-items: end;
+		gap: 2px;
+		height: 20px;
+		margin: var(--space-xs) var(--space-lg);
+		opacity: 0.3;
+		transition: opacity var(--duration-fast);
+	}
+	
+	.vu-meter.active {
+		opacity: 0.8;
+	}
+	
+	.vu-bar {
+		width: 3px;
+		background: var(--terminal-green);
+		border-radius: 1px;
+		transition: height var(--duration-fast);
+	}
+	
+	.vu-bar:nth-child(1) {
+		height: 4px;
+		animation: vuPulse1 1.5s ease-in-out infinite;
+	}
+	
+	.vu-bar:nth-child(2) {
+		height: 8px;
+		animation: vuPulse2 1.2s ease-in-out infinite;
+	}
+	
+	.vu-bar:nth-child(3) {
+		height: 12px;
+		animation: vuPulse3 1.8s ease-in-out infinite;
+	}
+	
+	.vu-bar:nth-child(4) {
+		height: 16px;
+		animation: vuPulse4 1.1s ease-in-out infinite;
+	}
+	
+	.vu-bar:nth-child(5) {
+		height: 20px;
+		animation: vuPulse5 1.6s ease-in-out infinite;
+	}
+	
 	@keyframes spin {
 		from { transform: rotate(0deg); }
 		to { transform: rotate(360deg); }
+	}
+	
+	@keyframes tapeSpool {
+		0% { transform: translate(-50%, -50%) rotate(0deg); }
+		100% { transform: translate(-50%, -50%) rotate(360deg); }
+	}
+	
+	@keyframes tapeFlow {
+		0% { background-position: -200% 0; }
+		100% { background-position: 200% 0; }
+	}
+	
+	@keyframes cassetteGlow {
+		0%, 100% { 
+			box-shadow: 
+				0 8px 32px rgba(0, 0, 0, 0.5),
+				0 0 20px rgba(139, 69, 19, 0.3),
+				inset 0 0 20px rgba(139, 69, 19, 0.1);
+		}
+		50% { 
+			box-shadow: 
+				0 8px 32px rgba(0, 0, 0, 0.5),
+				0 0 30px rgba(139, 69, 19, 0.5),
+				inset 0 0 30px rgba(139, 69, 19, 0.2);
+		}
+	}
+	
+	@keyframes vuPulse1 {
+		0%, 100% { height: 4px; opacity: 0.6; }
+		50% { height: 8px; opacity: 1; }
+	}
+	
+	@keyframes vuPulse2 {
+		0%, 100% { height: 8px; opacity: 0.7; }
+		50% { height: 12px; opacity: 1; }
+	}
+	
+	@keyframes vuPulse3 {
+		0%, 100% { height: 12px; opacity: 0.8; }
+		50% { height: 16px; opacity: 1; }
+	}
+	
+	@keyframes vuPulse4 {
+		0%, 100% { height: 16px; opacity: 0.9; }
+		50% { height: 18px; opacity: 1; }
+	}
+	
+	@keyframes vuPulse5 {
+		0%, 100% { height: 20px; opacity: 1; }
+		50% { height: 20px; opacity: 0.8; }
 	}
 	
 	.track-info {
@@ -475,8 +652,21 @@
 	}
 	
 	@media (prefers-reduced-motion: reduce) {
-		.reel.spinning {
+		.reel.spinning,
+		.tape-spool.active,
+		.tape-path,
+		.music-player.playing,
+		.vu-bar {
 			animation: none;
+		}
+		
+		.music-player.playing {
+			box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+		}
+		
+		.vu-bar {
+			height: 8px !important;
+			opacity: 0.7;
 		}
 	}
 </style>

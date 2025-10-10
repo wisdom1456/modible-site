@@ -4,9 +4,10 @@
 	import ContentGrid from '$lib/components/content/ContentGrid.svelte';
 	import ArcadeCard from '$lib/components/content/ArcadeCard.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
-	import type { PageData } from './$types';
+	import type { PageData, PageProps } from './$types';
 	
 	export let data: PageData;
+	export let params: PageProps['params'];
 </script>
 
 <SEOHead
