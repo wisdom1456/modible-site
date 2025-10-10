@@ -35,7 +35,15 @@ export async function loadContentBySlug<T extends Frontmatter>(
 	slug: string
 ): Promise<ContentItem<T> | null> {
 	try {
-		const module = await import(`../../content/${type}/${slug}.md`);
+		// Use dynamic import with proper path resolution
+		const modules = import.meta.glob<ContentItem<T>>('/src/content/**/*.md', { eager: false });
+		const path = `/src/content/${type}/${slug}.md`;
+		
+		if (!modules[path]) {
+			return null;
+		}
+		
+		const module = await modules[path]();
 		const metadata = module.metadata as T;
 
 		// Block drafts in production
@@ -45,6 +53,7 @@ export async function loadContentBySlug<T extends Frontmatter>(
 
 		return module as ContentItem<T>;
 	} catch (e) {
+		console.error('Error loading content:', e);
 		return null;
 	}
 }

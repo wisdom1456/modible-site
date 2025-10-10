@@ -27,9 +27,12 @@ const config = {
 		prerender: {
 			handleHttpError: 'warn',
 			handleMissingId: 'warn',
+			handleUnseenRoutes: 'warn',
 			entries: [
 				'*',
-				'/demos/neural-network-visualizer'
+				'/demos/neural-network-visualizer',
+				'/art/website-portfolio-showcase',
+				'/music/playlist.json'
 			]
 		}
 	}

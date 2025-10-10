@@ -4,10 +4,9 @@
 	import ContentGrid from '$lib/components/content/ContentGrid.svelte';
 	import ArcadeCard from '$lib/components/content/ArcadeCard.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
-	import type { PageData, PageProps } from './$types';
+	import type { PageData } from './$types';
 	
 	export let data: PageData;
-	export let params: PageProps['params'];
 </script>
 
 <SEOHead
@@ -43,11 +42,12 @@
 		{#if data.featured.length > 0}
 			<ContentGrid columns={3}>
 				{#each data.featured as item}
+					{@const routePath = item.metadata.type === 'demo' ? 'demos' : item.metadata.type === 'essay' ? 'essays' : 'art'}
 					<ArcadeCard
 						title={item.metadata.title}
 						description={item.metadata.description}
 						imageUrl={item.metadata.og_image || '/images/placeholder.png'}
-						href="/{item.metadata.type}s/{item.metadata.slug}"
+						href="/{routePath}/{item.metadata.slug}"
 						tags={item.metadata.tags}
 						featured={item.metadata.featured}
 					/>

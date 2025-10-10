@@ -15,6 +15,16 @@ export const GET: RequestHandler = async () => {
 		.sort((a, b) => new Date(b.metadata.date).getTime() - new Date(a.metadata.date).getTime())
 		.slice(0, 20);
 
+	// Helper to get the correct route path for each content type
+	const getRoutePath = (type: string) => {
+		const routes: Record<string, string> = {
+			demo: 'demos',
+			essay: 'essays',
+			art: 'art'
+		};
+		return routes[type] || type;
+	};
+
 	const rss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
@@ -24,14 +34,17 @@ export const GET: RequestHandler = async () => {
 		<atom:link href="${siteConfig.url}/rss.xml" rel="self" type="application/rss+xml"/>
 		${allContent
 			.map(
-				(item) => `
+				(item) => {
+					const routePath = getRoutePath(item.metadata.type);
+					return `
 		<item>
 			<title>${item.metadata.title}</title>
 			<description>${item.metadata.description}</description>
-			<link>${siteConfig.url}/${item.metadata.type}s/${item.metadata.slug}</link>
-			<guid isPermaLink="true">${siteConfig.url}/${item.metadata.type}s/${item.metadata.slug}</guid>
+			<link>${siteConfig.url}/${routePath}/${item.metadata.slug}</link>
+			<guid isPermaLink="true">${siteConfig.url}/${routePath}/${item.metadata.slug}</guid>
 			<pubDate>${new Date(item.metadata.date).toUTCString()}</pubDate>
-		</item>`
+		</item>`;
+				}
 			)
 			.join('')}
 	</channel>
