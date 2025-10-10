@@ -47,9 +47,10 @@
 						title={item.metadata.title}
 						description={item.metadata.description}
 						imageUrl={item.metadata.og_image || '/images/placeholder.png'}
-						href="/{routePath}/{item.metadata.slug}"
+					href={`/${routePath}/${item.metadata.slug}`}
 						tags={item.metadata.tags}
 						featured={item.metadata.featured}
+					reload={routePath === 'art'}
 					/>
 				{/each}
 			</ContentGrid>

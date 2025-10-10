@@ -15,7 +15,7 @@
 <SEOHead
 	title={metadata.title}
 	description={metadata.description}
-	canonical="https://modible.netlify.app/art/{metadata.slug}"
+	canonical={`https://modible.netlify.app/art/${metadata.slug}`}
 	ogImage={metadata.og_image}
 	type="article"
 	publishDate={metadata.date}
@@ -64,11 +64,11 @@
 	</RetroPanel>
 
 	<!-- Tools/Technologies -->
-	{#if metadata.tools.length > 0}
+	{#if metadata.tools && metadata.tools.length > 0}
 		<section class="tools">
 			<h2 class="heading-lg">Tools & Technologies</h2>
 			<div class="tool-tags">
-				{#each metadata.tools as tool}
+				{#each metadata.tools || [] as tool}
 					<Tag label={tool} variant="highlight" />
 				{/each}
 			</div>

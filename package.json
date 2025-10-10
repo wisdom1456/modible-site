@@ -13,7 +13,9 @@
     "format": "prettier --write .",
     "new:demo": "node scripts/new-content.js demo",
     "new:essay": "node scripts/new-content.js essay",
-    "new:art": "node scripts/new-content.js art"
+    "new:art": "node scripts/new-content.js art",
+    "snapshots": "node --loader ts-node/esm scripts/screenshot-sites.ts",
+    "snapshots:install": "playwright install chromium"
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^3.0.1",
@@ -28,6 +30,8 @@
     "tailwindcss": "^3.4.1",
     "tslib": "^2.6.2",
     "typescript": "^5.3.3",
-    "vite": "^5.0.11"
+    "vite": "^5.0.11",
+    "playwright": "^1.48.2",
+    "ts-node": "^10.9.2"
   }
 }

@@ -38,7 +38,7 @@ Every website I build tells a story — of a brand, a mission, or a community. M
 
 ---
 
-## Okaloosa Bar Association
+## [Okaloosa Bar Association](https://www.okaloosabar.com)
 
 A clean, member-driven site for Northwest Florida's legal community. Built for clarity and simplicity, it allows easy updates for events and resources.
 
@@ -51,7 +51,7 @@ The challenge was creating a professional platform that non-technical staff coul
 
 ---
 
-## Remol Law Firm
+## [Remol Law Firm](https://www.remollawfirm.com)
 
 A sharp, professional design reflecting a boutique law firm's brand identity. Subtle animations and clear CTAs drive engagement.
 
@@ -64,7 +64,7 @@ SvelteKit's component architecture allowed for reusable UI patterns across pract
 
 ---
 
-## P'Jays Pools
+## [P'Jays Pools](https://www.pjayspools.com)
 
 A bright, coastal design for a custom pool builder. The site uses responsive imagery and subtle motion to bring their work to life.
 
@@ -77,7 +77,7 @@ Astro's image optimization kept load times under 2 seconds even with high-res po
 
 ---
 
-## Tonya Holman, P.A.
+## [Tonya Holman, P.A.](https://www.tonyaholmanlawfirm.com)
 
 A high-contrast layout emphasizing trust and experience. Service pages are SEO-optimized for Northwest Florida.
 
@@ -90,7 +90,7 @@ Nunjucks templating made it easy to maintain consistency across 15+ practice are
 
 ---
 
-## Cotton Land and Title
+## [Cotton Land and Title](https://www.cottonlandtitle.com)
 
 A minimalist title company site that balances professionalism with warmth. Subtle gradient accents echo the firm's regional heritage.
 
@@ -103,7 +103,7 @@ Real estate transactions happen on-the-go. This site was built mobile-first with
 
 ---
 
-## N1L3
+## [N1L3](https://www.n1l3.com)
 
 A sleek, modern showcase for a creative agency. Interactive elements highlight their "No One Left Behind" ethos.
 
@@ -116,7 +116,7 @@ Astro's islands architecture let me add React components exactly where interacti
 
 ---
 
-## Waterhouse Law Firm, P.A.
+## [Waterhouse Law Firm, P.A.](https://www.waterhouselawfirm.com)
 
 A modern redesign that reinforces credibility and clarity for a Florida law firm specializing in civil litigation.
 
@@ -129,7 +129,7 @@ The previous site had a 12% contact form completion rate. After redesigning with
 
 ---
 
-## OFAWL
+## [OFAWL](https://www.ofawl.org)
 
 **Okaloosa-Walton Florida Association for Women Lawyers**
 
@@ -144,7 +144,7 @@ WCAG 2.1 AA compliance was critical for this nonprofit. Every interactive elemen
 
 ---
 
-## Keep It Realtime
+## [Keep It Realtime](https://www.keepitrealtime.com)
 
 A forward-thinking tech brand site focused on automation and AI integration. Bold, high-contrast visuals drive a sense of innovation.
 
@@ -157,7 +157,7 @@ The motion design respects `prefers-reduced-motion` — animations fade graceful
 
 ---
 
-## Franklin's Treehouse Foundation
+## [Franklin's Treehouse Foundation](https://www.franklinstreehouse.org)
 
 A nonprofit website dedicated to community impact and education. Simple, heartfelt design with a strong focus on clarity and mission.
 
@@ -172,8 +172,8 @@ Sometimes the most powerful design is the simplest. This site strips away comple
 
 ## Also Built
 
-- **Bernhardt Riley, PLLC** — Modern legal platform • SvelteKit + Supabase
-- **Credit and Debt Relief** — Conversion-focused landing site • Astro + Tailwind
+- **[Bernhardt Riley, PLLC](https://www.brflorida.com)** — Modern legal platform • SvelteKit + Supabase
+- **[Credit and Debt Relief](https://www.creditanddebtrelief.com)** — Conversion-focused landing site • Astro + Tailwind
 
 ---
 

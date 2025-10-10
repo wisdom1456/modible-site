@@ -59,9 +59,10 @@
 						title={artwork.metadata.title}
 						description={artwork.metadata.description}
 						imageUrl={artwork.metadata.og_image || '/images/placeholder.png'}
-						href="/art/{artwork.metadata.slug}"
+						href={`/art/${artwork.metadata.slug}`}
 						tags={artwork.metadata.tags}
 						featured={artwork.metadata.featured}
+						reload={true}
 					/>
 				{/each}
 			</ContentGrid>

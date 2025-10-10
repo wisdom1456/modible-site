@@ -7,21 +7,30 @@
 	export let href: string;
 	export let tags: string[] = [];
 	export let featured: boolean = false;
+	export let reload: boolean = false;
+
+	let currentImageUrl: string;
+	$: currentImageUrl = imageUrl;
+
+	function handleImageError() {
+		currentImageUrl = '/images/placeholder.png';
+	}
 </script>
 
 <article class="arcade-card" class:featured>
-	<a {href} class="card-link">
+	<a {href} class="card-link" data-sveltekit-reload={reload}>
 		<header class="marquee">
 			<span class="marquee-text">{title}</span>
 		</header>
 		
 		<div class="screen">
 			<img 
-				src={imageUrl} 
+				src={currentImageUrl} 
 				alt="{title} preview"
 				loading="lazy"
 				width="400"
 				height="300"
+				on:error={handleImageError}
 			/>
 			<div class="crt-overlay" />
 		</div>
