@@ -1,0 +1,612 @@
+# Modible: Project Brief for AI Development
+
+## Executive Summary
+
+**Project Name:** Modible  
+**Type:** Interactive portfolio/showcase platform  
+**Audience:** General public (tech-curious, design enthusiasts, nostalgia seekers)  
+**Core Value:** Making modern technology accessible through nostalgic 90s aesthetics  
+
+**Critical Context for AI:** This is NOT a developer portfolio targeting recruiters. This is an interactive museum of modern technology wrapped in retro design. Every decision should prioritize emotional impact and accessibility over technical showcase.
+
+---
+
+## Design Philosophy
+
+### The Modible Promise
+```javascript
+const coreValues = {
+  aesthetic: "90s computing meets modern web",
+  purpose: "Educational + whimsical + visually stunning",
+  experience: "Learn through play, not reading",
+  accessibility: "Complex tech made approachable through nostalgia",
+  
+  // Critical: Retro is the HOOK, not the product
+  product: "Making modern technology joyful and accessible"
+};
+```
+
+### Visual Identity
+- **Primary:** Purple phosphor CRT aesthetic (rare on vintage monitors)
+- **Accent:** Terminal green (classic phosphor)
+- **Effects:** Scanlines, CRT glow, beveled borders (Windows 95)
+- **Typography:** Display (Press Start 2P), Interface (Epilogue), Code (JetBrains Mono)
+- **Metaphors:** Arcade cabinets, vinyl records, cassette tapes, DOS prompts
+
+### Voice & Tone
+```javascript
+const voice = {
+  audience: "Smart friend who isn't a developer",
+  style: "Conversational, patient, playful",
+  avoid: ["Jargon", "Technical assumptions", "Corporate speak"],
+  use: ["Plain English", "Visual explanations", "Nostalgic references"],
+  
+  examples: {
+    bad: "Leveraging TensorFlow for multi-layer perceptron visualization",
+    good: "Watch a neural network learn to recognize handwriting in real-time"
+  }
+};
+```
+
+---
+
+## Technical Stack
+
+### Framework
+```json
+{
+  "framework": "SvelteKit",
+  "language": "TypeScript",
+  "styling": "Tailwind CSS + Custom CSS (for retro effects)",
+  "build": "Vite",
+  "deployment": "Vercel/Netlify (static)",
+  "cms": "File-based Markdown (MDsveX)"
+}
+```
+
+### Key Dependencies
+```json
+{
+  "required": [
+    "svelte",
+    "sveltekit", 
+    "@sveltejs/adapter-static",
+    "mdsvex",
+    "tailwindcss"
+  ],
+  "optional": [
+    "lucide-svelte (icons)",
+    "date-fns (date formatting)"
+  ]
+}
+```
+
+### Project Structure
+```
+modible/
+├── src/
+│   ├── lib/
+│   │   ├── components/        # Reusable UI components
+│   │   │   ├── layout/       # Header, Footer, StatusBar
+│   │   │   ├── content/      # RetroPanel, ArcadeCard
+│   │   │   ├── effects/      # Scanlines, CRTGlow
+│   │   │   └── ui/           # Button, Input, etc.
+│   │   ├── styles/
+│   │   │   ├── global.css    # Global styles + CRT effects
+│   │   │   └── tokens.css    # Design tokens
+│   │   ├── utils/
+│   │   │   ├── date.ts       # Date formatting
+│   │   │   └── metadata.ts   # SEO helpers
+│   │   └── stores/           # Svelte stores (if needed)
+│   ├── routes/
+│   │   ├── +page.svelte      # Homepage
+│   │   ├── +layout.svelte    # Root layout
+│   │   ├── demos/
+│   │   │   └── [slug]/       # Demo pages
+│   │   ├── essays/
+│   │   │   └── [slug]/       # Essay pages
+│   │   ├── art/
+│   │   │   └── [slug]/       # Art project pages
+│   │   └── log/              # Build diary
+│   └── content/              # Markdown files
+│       ├── demos/
+│       ├── essays/
+│       └── art/
+├── static/
+│   ├── fonts/
+│   ├── images/
+│   └── sounds/
+└── docs/                     # This documentation
+```
+
+---
+
+## Content Model
+
+### Content Types
+```typescript
+type ContentType = 'demo' | 'essay' | 'art';
+
+interface BaseContent {
+  slug: string;
+  title: string;
+  description: string;
+  date: string;
+  updated?: string;
+  draft: boolean;
+  featured: boolean;
+  tags: string[];
+  og_image?: string;
+}
+
+interface Demo extends BaseContent {
+  type: 'demo';
+  interactive: boolean;
+  github_url?: string;
+  live_url?: string;
+  technologies: string[];
+}
+
+interface Essay extends BaseContent {
+  type: 'essay';
+  reading_time: string;
+  series?: string;
+}
+
+interface Art extends BaseContent {
+  type: 'art';
+  medium: string;
+  interactive: boolean;
+}
+```
+
+### Markdown Frontmatter Example
+```yaml
+---
+title: "Neural Network Visualizer"
+description: "Watch a neural network learn to recognize handwriting in real-time"
+type: demo
+date: 2025-01-15
+featured: true
+draft: false
+tags:
+  - AI
+  - Neural Networks
+  - Interactive
+technologies:
+  - SvelteKit
+  - Canvas API
+  - TensorFlow.js
+interactive: true
+github_url: https://github.com/username/neural-viz
+og_image: /images/demos/neural-viz-og.png
+---
+```
+
+---
+
+## URL Structure (CRITICAL)
+
+```javascript
+const urlStructure = {
+  // NEVER deviate from this structure
+  homepage: "/",
+  demos: "/demos/[slug]",
+  essays: "/essays/[slug]",
+  art: "/art/[slug]",
+  log: "/log",
+  stack: "/stack/[tech]",
+  now: "/now",
+  about: "/about",
+  
+  // SEO Rules:
+  rules: [
+    "ONE canonical URL per content piece",
+    "NO alternate URLs or duplicates",
+    "Internal links ALWAYS use canonical URLs",
+    "301 redirect any alternate attempts"
+  ],
+  
+  // Examples:
+  good: "/demos/neural-network-visualizer",
+  bad: [
+    "/demo/neural-network-visualizer",  // Wrong: 'demo' not 'demos'
+    "/projects/neural-network-visualizer", // Wrong: use content type
+    "/neural-network-visualizer"  // Wrong: missing type prefix
+  ]
+};
+```
+
+---
+
+## Brand Identity Guidelines
+
+### Color Tokens (Use these EXACT values)
+```css
+:root {
+  /* Purple Phosphor (Primary) */
+  --neon-purple-900: #1A0B2E;
+  --neon-purple-700: #3D1F5C;
+  --neon-purple-500: #7B2FBF;
+  --neon-purple-400: #A855F7;
+  --neon-purple-200: #D4A5FF;
+  
+  /* Terminal Green (Accent) */
+  --terminal-green: #10B981;
+  --terminal-green-glow: #34D399;
+  --terminal-green-dim: #059669;
+  
+  /* CRT Grayscale (Base) */
+  --crt-black: #0A0A0A;
+  --crt-gray-900: #1C1C1E;
+  --crt-gray-700: #2C2C2E;
+  --crt-gray-500: #48484A;
+  --crt-gray-300: #8E8E93;
+  --crt-white: #F5F5F7;
+  
+  /* Semantic (Use sparingly) */
+  --amber-warning: #F59E0B;
+  --cyan-info: #06B6D4;
+  --magenta-error: #EC4899;
+}
+```
+
+### Typography Scale
+```css
+/* Display - Headlines only (Press Start 2P) */
+.display-xl {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+}
+
+/* Heading - Subheadings (Epilogue) */
+.heading-lg {
+  font-family: var(--font-interface);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* Body - Readable (Epilogue) */
+.body {
+  font-family: var(--font-interface);
+  font-size: 1rem;
+  line-height: 1.7;
+  max-width: 65ch;
+}
+
+/* Label - System text (Monospace) */
+.label {
+  font-family: var(--font-label);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Code - Technical (JetBrains Mono) */
+.code {
+  font-family: var(--font-code);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+```
+
+### Spacing System
+```css
+:root {
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+}
+```
+
+### Animation Tokens
+```css
+:root {
+  /* Duration */
+  --duration-instant: 50ms;
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 400ms;
+  
+  /* Easing */
+  --ease-default: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-snappy: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}
+```
+
+---
+
+## Performance Requirements
+
+### Core Web Vitals Targets
+```javascript
+const performanceTargets = {
+  LCP: "< 2.5s",  // Largest Contentful Paint
+  FID: "< 100ms", // First Input Delay
+  CLS: "< 0.1",   // Cumulative Layout Shift
+  
+  lighthouse: {
+    performance: 95,
+    accessibility: 100,
+    seo: 100,
+    bestPractices: 95
+  },
+  
+  bundles: {
+    initialJS: "< 100kb gzipped",
+    initialCSS: "< 20kb gzipped",
+    fonts: "< 50kb total"
+  }
+};
+```
+
+### Image Optimization
+```typescript
+// All images must follow this pattern
+interface ImageOptimization {
+  formats: ['avif', 'webp', 'jpg']; // Fallback order
+  sizes: [600, 1200, 1800]; // Responsive sizes
+  loading: 'lazy' | 'eager'; // Lazy by default, eager for above-fold
+  alt: string; // Always required, descriptive
+}
+
+// Example implementation
+const imageExample = `
+<picture>
+  <source srcset="/images/demo.avif 1200w" type="image/avif">
+  <source srcset="/images/demo.webp 1200w" type="image/webp">
+  <img 
+    src="/images/demo.jpg" 
+    alt="Neural network visualization showing backpropagation"
+    width="1200"
+    height="630"
+    loading="lazy"
+  >
+</picture>
+`;
+```
+
+---
+
+## SEO Requirements (CRITICAL)
+
+### Meta Template (Use for ALL pages)
+```typescript
+interface PageMeta {
+  title: string; // Format: "{Page Title} | Modible"
+  description: string; // 120-160 characters
+  canonical: string; // Absolute URL
+  ogImage: string; // 1200x630px
+  type: 'website' | 'article';
+  publishDate?: string; // ISO 8601
+  modifiedDate?: string; // ISO 8601
+}
+
+// Example
+const exampleMeta = {
+  title: "Neural Network Visualizer | Modible",
+  description: "Watch a neural network learn to recognize handwriting in real-time. Interactive visualization with 90s arcade aesthetics.",
+  canonical: "https://modible.com/demos/neural-network-visualizer",
+  ogImage: "https://modible.com/images/demos/neural-viz-og.png",
+  type: "article",
+  publishDate: "2025-01-15T00:00:00Z"
+};
+```
+
+### Structured Data (Schema.org)
+```typescript
+// For demos/projects
+const softwareSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Neural Network Visualizer",
+  "applicationCategory": "DeveloperApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+};
+
+// For essays/articles
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Building Interactive AI Visualizations",
+  "author": {
+    "@type": "Person",
+    "name": "Your Name"
+  },
+  "datePublished": "2025-01-15"
+};
+```
+
+---
+
+## Accessibility Requirements (WCAG 2.1 AA)
+
+```javascript
+const a11yRequirements = {
+  colorContrast: "4.5:1 minimum for body text",
+  focusIndicators: "Visible on ALL interactive elements",
+  keyboardNav: "All features accessible via keyboard",
+  semanticHTML: "Use proper HTML5 elements",
+  ariaLabels: "Required when semantic HTML insufficient",
+  altText: "Descriptive for all images (not 'image of')",
+  reducedMotion: "@media (prefers-reduced-motion: reduce) support"
+};
+```
+
+### Reduced Motion Support (REQUIRED)
+```css
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .scanlines,
+  .vignette {
+    display: none;
+  }
+}
+```
+
+---
+
+## Development Principles for AI
+
+### When Creating New Components
+1. **Mobile-first:** Design for 375px width first
+2. **Semantic HTML:** Use proper elements (article, section, nav)
+3. **TypeScript:** All components must be typed
+4. **Accessibility:** Test keyboard navigation
+5. **Performance:** Lazy load everything possible
+
+### When Creating New Pages
+1. **Use templates:** Follow existing page structure
+2. **SEO-first:** Meta tags before content
+3. **Responsive:** Test at 375px, 768px, 1024px, 1440px
+4. **Content structure:** Breadcrumb → Hero → Content → Related
+5. **Share-friendly:** OG tags must be perfect
+
+### When Writing Copy
+1. **Plain English:** Explain like talking to a smart non-technical friend
+2. **Value-first:** What's the benefit, not the tech
+3. **Scannable:** Headers, short paragraphs, bullet points
+4. **Personality:** Playful but not childish
+5. **Action-oriented:** Clear CTAs
+
+### Code Style
+```typescript
+// Good: Clear, typed, semantic
+interface ProjectCardProps {
+  title: string;
+  description: string;
+  imageUrl: string;
+  href: string;
+}
+
+export function ProjectCard({ title, description, imageUrl, href }: ProjectCardProps) {
+  return (
+    <article class="arcade-card">
+      <header class="marquee">{title}</header>
+      {/* ... */}
+    </article>
+  );
+}
+
+// Bad: Unclear, untyped, divs everywhere
+function Card(props) {
+  return <div><div>{props.title}</div></div>;
+}
+```
+
+---
+
+## Critical Decisions (DO NOT CHANGE)
+
+### 1. File-based CMS
+- Content lives in `/src/content/` as Markdown
+- Processed by MDsveX
+- NOT using external CMS (Sanity, Contentful, etc.)
+- Rationale: Simplicity, version control, no dependencies
+
+### 2. Static Site Generation
+- Use `@sveltejs/adapter-static`
+- Pre-render all pages at build time
+- No server-side rendering (SSR)
+- Rationale: Performance, SEO, free hosting
+
+### 3. URL Structure
+- Content type prefix required (`/demos/`, `/essays/`, `/art/`)
+- Slug must match filename
+- NO query parameters for content
+- Rationale: SEO, shareability, clarity
+
+### 4. Design Token Usage
+- NEVER hardcode colors or spacing
+- ALWAYS use CSS custom properties
+- Use Tailwind for layout, custom CSS for effects
+- Rationale: Consistency, future theming support
+
+### 5. Mobile Performance
+- Reduced effects on mobile (scanlines only)
+- Lazy load all images
+- No auto-play anything
+- Rationale: Battery life, data usage, performance
+
+---
+
+## Success Criteria
+
+A page/component is complete when:
+
+- [ ] Works on mobile (375px width)
+- [ ] Passes Lighthouse (95+ performance, 100 accessibility)
+- [ ] Has proper SEO meta tags
+- [ ] Has OG image (1200x630px)
+- [ ] Keyboard navigable
+- [ ] Respects reduced motion preference
+- [ ] Loads in < 2 seconds on 3G
+- [ ] Console has no errors or warnings
+- [ ] TypeScript compiles with no errors
+- [ ] Visual matches retro aesthetic (purple, scanlines, beveled borders)
+
+---
+
+## Quick Reference Commands
+
+```bash
+# Development
+npm run dev
+
+# Build (static)
+npm run build
+
+# Preview build
+npm run preview
+
+# Type check
+npm run check
+
+# Lint
+npm run lint
+
+# Format
+npm run format
+```
+
+---
+
+## Next Steps for Development
+
+1. Set up SvelteKit project with TypeScript
+2. Install dependencies (mdsvex, tailwind)
+3. Create design token CSS file
+4. Build layout component (Header, Footer, StatusBar)
+5. Create content schema and load system
+6. Build homepage with placeholder content
+7. Create first component (ArcadeCard or RetroPanel)
+8. Test mobile + accessibility
+9. Deploy to Vercel/Netlify
+
+**Remember:** Build the CMS/posting system first. Content (demos, essays) comes later.
+
+---
+
+*Last Updated: January 2025*  
+*Version: 1.0*  
+*For: Cursor AI Development*

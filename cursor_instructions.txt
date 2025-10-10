@@ -1,0 +1,821 @@
+# Cursor AI: Development Instructions
+
+## How to Use This Documentation
+
+You have access to four key documents:
+
+1. **PROJECT_BRIEF.md** - Overall vision, tech stack, design philosophy
+2. **COMPONENT_LIBRARY.md** - All reusable components with implementations
+3. **CONTENT_SCHEMA.md** - Content structure, routing, file organization
+4. **THIS FILE** - Common patterns and workflows for you to follow
+
+**Always reference these docs before creating new code.** They contain the exact specifications, prop interfaces, and styling patterns to use.
+
+---
+
+## Common Tasks & How to Complete Them
+
+### Task 1: Create a New Component
+
+**Request:** "Create a LoadingSpinner component"
+
+**Steps:**
+1. Check if similar component exists in COMPONENT_LIBRARY.md
+2. Define TypeScript interface for props
+3. Implement component following design system
+4. Add to appropriate category in component library
+
+**Example Implementation:**
+```svelte
+<!-- src/lib/components/ui/LoadingSpinner.svelte -->
+<script lang="ts">
+  export let size: 'sm' | 'md' | 'lg' = 'md';
+  export let color: 'purple' | 'green' = 'purple';
+  
+  const sizes = {
+    sm: '16px',
+    md: '32px',
+    lg: '48px'
+  };
+  
+  const colors = {
+    purple: 'var(--neon-purple-400)',
+    green: 'var(--terminal-green)'
+  };
+</script>
+
+<div 
+  class="loading-spinner"
+  role="status"
+  aria-label="Loading"
+  style="
+    --size: {sizes[size]};
+    --color: {colors[color]};
+  "
+>
+  <span class="visually-hidden">Loading...</span>
+</div>
+
+<style>
+  .loading-spinner {
+    width: var(--size);
+    height: var(--size);
+    border: 2px solid var(--crt-gray-700);
+    border-top-color: var(--color);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+</style>
+```
+
+---
+
+### Task 2: Create a New Content Page
+
+**Request:** "Add a new demo called 'Music Visualizer'"
+
+**Steps:**
+1. Create markdown file: `src/content/demos/music-visualizer.md`
+2. Add complete frontmatter (reference CONTENT_SCHEMA.md)
+3. Write content following structure guidelines
+4. Routing is automatic (SvelteKit handles [slug])
+
+**Example:**
+```markdown
+---
+title: "Real-Time Music Visualizer"
+description: "Transform any audio into flowing geometric patterns using the Web Audio API"
+type: demo
+date: 2025-01-30
+slug: music-visualizer
+
+tags:
+  - Audio
+  - Visualization
+  - WebGL
+technologies:
+  - SvelteKit
+  - Web Audio API
+  - Canvas API
+
+featured: false
+draft: true
+interactive: true
+github_url: https://github.com/user/music-viz
+og_image: /images/demos/music-viz-og.png
+difficulty: intermediate
+---
+
+## What This Does
+
+Upload any song and watch it transform into real-time visual art...
+
+[Content continues...]
+```
+
+**File automatically becomes available at:** `/demos/music-visualizer`
+
+---
+
+### Task 3: Create a New Page (Non-Content)
+
+**Request:** "Create a /stack page showing all technologies used"
+
+**Steps:**
+1. Create route file: `src/routes/stack/+page.svelte`
+2. Create data loader: `src/routes/stack/+page.ts`
+3. Use existing components from COMPONENT_LIBRARY.md
+4. Follow SEO requirements from PROJECT_BRIEF.md
+
+**Example:**
+```typescript
+// src/routes/stack/+page.ts
+import type { PageLoad } from './$types';
+import { getAllTechnologies } from '$lib/utils/content';
+
+export const load: PageLoad = async () => {
+  const technologies = await getAllTechnologies();
+  
+  return {
+    technologies,
+    meta: {
+      title: 'Technology Stack',
+      description: 'All the technologies and tools used across Modible projects'
+    }
+  };
+};
+```
+
+```svelte
+<!-- src/routes/stack/+page.svelte -->
+<script lang="ts">
+  import SEOHead from '$lib/components/seo/SEOHead.svelte';
+  import Container from '$lib/components/layout/Container.svelte';
+  import Tag from '$lib/components/ui/Tag.svelte';
+  
+  export let data;
+</script>
+
+<SEOHead
+  title={data.meta.title}
+  description={data.meta.description}
+  canonical="https://modible.com/stack"
+  type="website"
+/>
+
+<Container>
+  <h1 class="display-xl">{data.meta.title}</h1>
+  <p class="body">{data.meta.description}</p>
+  
+  <div class="tech-grid">
+    {#each data.technologies as tech}
+      <Tag label={tech} href="/stack/{tech.toLowerCase()}" />
+    {/each}
+  </div>
+</Container>
+```
+
+---
+
+### Task 4: Modify Existing Component
+
+**Request:** "Add a 'size' prop to the Button component"
+
+**Steps:**
+1. Check current implementation in COMPONENT_LIBRARY.md
+2. Add to TypeScript interface
+3. Implement size variants
+4. Test all existing usages still work
+
+**Example:**
+```svelte
+<script lang="ts">
+  // Add to existing props
+  export let size: 'sm' | 'md' | 'lg' = 'md';
+</script>
+
+<style>
+  /* Add size variants */
+  .btn-sm {
+    padding: var(--space-xs) var(--space-md);
+    font-size: 0.75rem;
+  }
+  
+  .btn-md {
+    padding: var(--space-sm) var(--space-lg);
+    font-size: 0.875rem;
+  }
+  
+  .btn-lg {
+    padding: var(--space-md) var(--space-xl);
+    font-size: 1rem;
+  }
+</style>
+```
+
+---
+
+### Task 5: Add SEO to a Page
+
+**Request:** "Improve SEO for the homepage"
+
+**Steps:**
+1. Import SEOHead component
+2. Define all required meta
+3. Add structured data (if applicable)
+4. Verify canonical URL is correct
+
+**Example:**
+```svelte
+<script>
+  import SEOHead from '$lib/components/seo/SEOHead.svelte';
+</script>
+
+<SEOHead
+  title="Modible - Interactive Museum of Modern Technology"
+  description="Explore AI, neural networks, and generative art through interactive demos wrapped in nostalgic 90s aesthetics"
+  canonical="https://modible.com"
+  ogImage="https://modible.com/og-homepage.png"
+  type="website"
+/>
+```
+
+---
+
+## Design System Decision Tree
+
+### When choosing colors:
+
+```
+Is this for primary actions/headlines?
+└─ Yes → Use purple (--neon-purple-500)
+└─ No → Continue
+
+Is this for success/active states?
+└─ Yes → Use terminal green (--terminal-green)
+└─ No → Continue
+
+Is this for warnings?
+└─ Yes → Use amber (--amber-warning)
+└─ No → Continue
+
+Is this for errors?
+└─ Yes → Use magenta (--magenta-error)
+└─ No → Use grayscale (--crt-gray-*)
+```
+
+### When choosing typography:
+
+```
+Is this a major headline?
+└─ Yes → Use display font (Press Start 2P, .display-xl)
+└─ No → Continue
+
+Is this a subheading?
+└─ Yes → Use interface font (Epilogue, .heading-lg)
+└─ No → Continue
+
+Is this code or technical content?
+└─ Yes → Use code font (JetBrains Mono, .code)
+└─ No → Continue
+
+Is this a label/system text?
+└─ Yes → Use label font (Monospace, .label)
+└─ No → Use interface font (Epilogue, .body)
+```
+
+### When choosing spacing:
+
+```
+Tiny gap between related items?
+└─ Use var(--space-xs) - 4px
+
+Small gap within component?
+└─ Use var(--space-sm) - 8px
+
+Standard spacing between elements?
+└─ Use var(--space-md) - 16px
+
+Large spacing between sections?
+└─ Use var(--space-lg) - 24px
+
+Extra large spacing (major sections)?
+└─ Use var(--space-xl) - 32px
+
+Huge spacing (page sections)?
+└─ Use var(--space-xxl) - 48px
+```
+
+---
+
+## Code Quality Checklist
+
+Before considering any code complete, verify:
+
+### TypeScript
+- [ ] All props have types defined
+- [ ] No `any` types used
+- [ ] Interfaces exported if used elsewhere
+- [ ] Compiles without errors
+
+### Accessibility
+- [ ] Semantic HTML used
+- [ ] Focus states visible
+- [ ] ARIA labels where needed
+- [ ] Keyboard navigation works
+- [ ] Color contrast 4.5:1 minimum
+
+### Performance
+- [ ] Images lazy loaded (except above fold)
+- [ ] No blocking resources
+- [ ] Animations respect reduced-motion
+- [ ] Bundle size reasonable
+
+### SEO
+- [ ] Meta tags present
+- [ ] Canonical URL correct
+- [ ] OG image specified
+- [ ] Semantic HTML structure
+
+### Mobile
+- [ ] Tested at 375px width
+- [ ] Touch targets 44px minimum
+- [ ] Horizontal scroll prevented
+- [ ] Effects reduced on mobile
+
+---
+
+## Common Patterns to Follow
+
+### Pattern 1: Page Layout Structure
+
+Every content page should follow this structure:
+
+```svelte
+<SEOHead {...meta} />
+
+<Container size="lg">
+  <!-- Breadcrumb navigation -->
+  <nav class="breadcrumb">...</nav>
+  
+  <!-- Page hero -->
+  <header class="hero">
+    <h1 class="display-xl">Title</h1>
+    <p class="body">Description</p>
+  </header>
+  
+  <!-- Main content -->
+  <section class="content">
+    ...
+  </section>
+  
+  <!-- Related/additional -->
+  <section class="related">
+    ...
+  </section>
+</Container>
+```
+
+### Pattern 2: Loading States
+
+Always show loading feedback:
+
+```svelte
+<script>
+  import { onMount } from 'svelte';
+  import LoadingSpinner from '$lib/components/ui/LoadingSpinner.svelte';
+  
+  let loading = true;
+  let data;
+  
+  onMount(async () => {
+    data = await fetchData();
+    loading = false;
+  });
+</script>
+
+{#if loading}
+  <div class="loading-container">
+    <LoadingSpinner />
+    <p>Loading content...</p>
+  </div>
+{:else}
+  <!-- Render data -->
+{/if}
+```
+
+### Pattern 3: Error States
+
+Always handle errors gracefully:
+
+```svelte
+<script>
+  let error = null;
+  
+  async function handleAction() {
+    try {
+      await riskyOperation();
+    } catch (e) {
+      error = e.message;
+    }
+  }
+</script>
+
+{#if error}
+  <div class="error-message" role="alert">
+    <p>❌ {error}</p>
+    <button on:click={() => error = null}>Dismiss</button>
+  </div>
+{/if}
+```
+
+### Pattern 4: Responsive Images
+
+Always optimize images:
+
+```svelte
+<picture>
+  <source 
+    srcset="/images/demo.avif 1200w" 
+    type="image/avif"
+  >
+  <source 
+    srcset="/images/demo.webp 1200w" 
+    type="image/webp"
+  >
+  <img 
+    src="/images/demo.jpg" 
+    alt="Descriptive alt text"
+    width="1200"
+    height="630"
+    loading="lazy"
+  >
+</picture>
+```
+
+### Pattern 5: Form Handling
+
+Always validate and provide feedback:
+
+```svelte
+<script>
+  let email = '';
+  let submitting = false;
+  let submitted = false;
+  let error = '';
+  
+  async function handleSubmit() {
+    error = '';
+    submitting = true;
+    
+    try {
+      await submitEmail(email);
+      submitted = true;
+    } catch (e) {
+      error = 'Failed to subscribe. Please try again.';
+    } finally {
+      submitting = false;
+    }
+  }
+</script>
+
+<form on:submit|preventDefault={handleSubmit}>
+  <input
+    type="email"
+    bind:value={email}
+    placeholder="your@email.com"
+    required
+    disabled={submitting || submitted}
+  />
+  
+  <button type="submit" disabled={submitting || submitted}>
+    {#if submitting}
+      Subscribing...
+    {:else if submitted}
+      ✓ Subscribed!
+    {:else}
+      Subscribe
+    {/if}
+  </button>
+  
+  {#if error}
+    <p class="error" role="alert">{error}</p>
+  {/if}
+</form>
+```
+
+---
+
+## Content Creation Shortcuts
+
+### Quick Demo Template
+
+When asked to create a new demo:
+
+```markdown
+---
+title: "[Project Name]"
+description: "[One sentence explanation]"
+type: demo
+date: [YYYY-MM-DD]
+slug: [url-friendly-slug]
+
+tags: [Category1, Category2]
+technologies: [Tech1, Tech2]
+
+featured: false
+draft: true
+interactive: true
+github_url: https://github.com/user/repo
+og_image: /images/demos/[slug]-og.png
+---
+
+## What This Does
+
+[Explain what the demo shows in 2-3 sentences]
+
+## How to Use
+
+1. [Step 1]
+2. [Step 2]
+3. [Step 3]
+
+## Technical Details
+
+[High-level architecture explanation]
+
+### Key Technologies
+
+- **[Tech 1]**: [Why used]
+- **[Tech 2]**: [Why used]
+
+## What I Learned
+
+[Personal reflection on building this]
+```
+
+### Quick Essay Template
+
+```markdown
+---
+title: "[Essay Title]"
+description: "[One sentence hook]"
+type: essay
+date: [YYYY-MM-DD]
+slug: [url-friendly-slug]
+
+tags: [Topic1, Topic2]
+reading_time: "[X] min read"
+
+featured: false
+draft: true
+
+og_image: /images/essays/[slug]-og.png
+---
+
+## The Problem
+
+[What problem are you solving?]
+
+## The Solution
+
+[What worked?]
+
+## The Results
+
+[What happened?]
+
+## Key Takeaways
+
+- [Takeaway 1]
+- [Takeaway 2]
+- [Takeaway 3]
+```
+
+---
+
+## Troubleshooting Guide
+
+### Issue: Component not rendering
+
+**Check:**
+1. Is it imported correctly?
+2. Are all props provided?
+3. Is TypeScript happy?
+4. Any console errors?
+
+### Issue: Styles not applying
+
+**Check:**
+1. Using CSS custom properties (not hardcoded values)?
+2. Proper specificity?
+3. Conflicting Tailwind classes?
+4. Component scoped styles?
+
+### Issue: Content not appearing
+
+**Check:**
+1. Is `draft: false`?
+2. Correct content type folder?
+3. Slug matches filename?
+4. Valid frontmatter YAML?
+
+### Issue: Routing not working
+
+**Check:**
+1. File in correct `routes/` folder?
+2. Proper `+page.svelte` naming?
+3. Dynamic route `[slug]` syntax correct?
+4. `+page.ts` loader returning data?
+
+### Issue: SEO meta not showing
+
+**Check:**
+1. `<SEOHead>` component imported?
+2. All required props provided?
+3. Canonical URL is absolute?
+4. OG image path correct?
+
+---
+
+## Performance Optimization Patterns
+
+### Lazy Load Images
+
+```svelte
+<img
+  src={imageUrl}
+  alt={altText}
+  loading="lazy"
+  decoding="async"
+/>
+```
+
+### Defer Non-Critical JS
+
+```svelte
+<script>
+  import { onMount } from 'svelte';
+  
+  onMount(async () => {
+    // Only load heavy libraries after mount
+    const heavyLib = await import('heavy-library');
+    // Use heavyLib
+  });
+</script>
+```
+
+### Preload Critical Resources
+
+```svelte
+<svelte:head>
+  <link 
+    rel="preload" 
+    href="/fonts/epilogue-variable.woff2" 
+    as="font" 
+    type="font/woff2"
+    crossorigin
+  >
+</svelte:head>
+```
+
+---
+
+## Git Commit Message Format
+
+Use conventional commits:
+
+```
+type(scope): subject
+
+body (optional)
+
+footer (optional)
+```
+
+**Types:**
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation
+- `style`: Formatting, no code change
+- `refactor`: Code restructuring
+- `perf`: Performance improvement
+- `test`: Adding tests
+- `chore`: Maintenance
+
+**Examples:**
+```
+feat(components): add LoadingSpinner component
+
+fix(seo): correct canonical URL generation
+
+docs(readme): update setup instructions
+
+style(button): adjust hover state colors
+
+refactor(content): extract loading logic to utility
+
+perf(images): implement lazy loading
+
+chore(deps): update svelte to 4.2.0
+```
+
+---
+
+## Questions to Ask Before Coding
+
+1. **Does this already exist?**
+   - Check COMPONENT_LIBRARY.md first
+   - Can I reuse/extend existing component?
+
+2. **Is this the right approach?**
+   - Does it match design system patterns?
+   - Is it accessible?
+   - Will it perform well on mobile?
+
+3. **What's the simplest solution?**
+   - Am I over-engineering?
+   - Can I use HTML/CSS instead of JS?
+   - Does it need to be a component or inline?
+
+4. **How will this scale?**
+   - What if there are 100 items?
+   - What if the text is very long?
+   - What if user has slow connection?
+
+5. **Is it maintainable?**
+   - Can someone else understand this?
+   - Is it properly documented?
+   - Are there tests needed?
+
+---
+
+## Final Reminders
+
+### Always:
+- ✅ Use design tokens (CSS custom properties)
+- ✅ Include TypeScript types
+- ✅ Add accessibility attributes
+- ✅ Test on mobile (375px width)
+- ✅ Optimize images (WebP/AVIF)
+- ✅ Include SEO meta tags
+- ✅ Handle loading/error states
+- ✅ Respect reduced-motion preference
+
+### Never:
+- ❌ Hardcode colors or spacing
+- ❌ Use `any` type in TypeScript
+- ❌ Skip semantic HTML
+- ❌ Forget alt text on images
+- ❌ Create duplicate components
+- ❌ Ignore mobile experience
+- ❌ Skip error handling
+- ❌ Leave console errors
+
+---
+
+## Your Capabilities as Cursor AI
+
+You can:
+- ✅ Create new components following exact specifications
+- ✅ Generate content files with proper frontmatter
+- ✅ Build entire pages from scratch
+- ✅ Modify existing code while maintaining patterns
+- ✅ Suggest improvements to architecture
+- ✅ Identify and fix bugs
+- ✅ Optimize for performance
+- ✅ Ensure accessibility compliance
+
+You should:
+- 💡 Reference these docs before suggesting solutions
+- 💡 Ask clarifying questions when requirements unclear
+- 💡 Suggest simpler alternatives when appropriate
+- 💡 Point out potential issues proactively
+- 💡 Explain your reasoning for decisions
+- 💡 Follow existing patterns consistently
+
+---
+
+**Remember:** The goal is to build a maintainable, accessible, performant website that makes modern technology feel approachable through nostalgic design. Every line of code should serve that mission.
+
+When in doubt, refer back to PROJECT_BRIEF.md for the vision, COMPONENT_LIBRARY.md for implementation patterns, and CONTENT_SCHEMA.md for content structure.
+
+*Last Updated: January 2025*  
+*Version: 1.0*  
+*For: Cursor AI Development*

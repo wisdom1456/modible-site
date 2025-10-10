@@ -1,0 +1,21 @@
+[
+	{
+		"id": "track-1",
+		"title": "Retro Wave",
+		"artist": "Modible",
+		"src": "/music/retro-wave.mp3"
+	},
+	{
+		"id": "track-2",
+		"title": "Digital Dreams",
+		"artist": "Modible",
+		"src": "/music/digital-dreams.mp3"
+	},
+	{
+		"id": "track-3",
+		"title": "Neon Nights",
+		"artist": "Modible",
+		"src": "/music/neon-nights.mp3"
+	}
+]
+
